@@ -14,6 +14,15 @@ const m_activeSenderIDsList = {};
 
 const CONST_WAIT_PARTY_TO_CONNECT_TIMEOUT = 60000; //5000;
 
+var c_commandProcessor = null;
+
+if (global.m_serverconfig.m_configuration.hasOwnProperty("command_plugin"))
+{
+    c_commandProcessor = require (global.m_serverconfig.m_configuration["command_plugin"]);
+}
+
+ 
+
 var v_andruavTasks;
 
 
@@ -237,6 +246,16 @@ function fn_onConnect_Handler(p_ws,p_req)
         }
 
         p_ws.m__group.m_lastAccessTime = Date.now();
+
+        if (c_commandProcessor != null)
+        {
+            c_commandProcessor.fn_processCommand(p_ws, p_message, v_jmsg, v_binaryIndex,
+                function (p_param1, p_param2)
+                {
+
+                    return ;
+                });
+        }
 
         switch (v_jmsg[c_CONSTANTS.CONST_WS_MSG_ROUTING])
         {
